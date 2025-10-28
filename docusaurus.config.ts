@@ -25,6 +25,7 @@ const config: Config = {
   organizationName: "abenla-devs", // Usually your GitHub org/user name.
   projectName: "abenla-devs.github.io", // Usually your repo name.
   deploymentBranch: "gh-pages",
+  trailingSlash: false,
 
   onBrokenLinks: "throw",
 
@@ -47,7 +48,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+            "https://github.com/abenla-devs/abenla-devs.github.io/tree/main/",
         },
         blog: {
           remarkPlugins: [require("remark-math")],
