@@ -15,4 +15,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Deploy
-        run: GIT_USER=${{ github.actor }} USE_SSH=true npm run deploy
+        env:
+          GIT_USER: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run deploy
