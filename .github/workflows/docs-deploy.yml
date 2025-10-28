@@ -3,10 +3,10 @@ name: Deploy Docusaurus to GitHub Pages
 on:
   push:
     branches:
-      - main  # mỗi khi push lên branch main sẽ tự deploy
+      - main
 
 permissions:
-  contents: write  # cần quyền ghi để push lên gh-pages
+  contents: write
 
 jobs:
   deploy:
@@ -34,6 +34,11 @@ jobs:
 
       - name: Deploy to GitHub Pages
         env:
+          # token cá nhân bạn tạo, đã lưu trong Settings → Secrets → Actions
+          GH_TOKEN: ${{ secrets.PHUOC_TOKEN }}
           GIT_USER: tranvietphuoc
-          GITHUB_TOKEN: ${{ secrets.PHUOC_TOKEN }}  # dùng token cá nhân thay cho GITHUB_TOKEN
-        run: npm run deploy
+          DEPLOYMENT_BRANCH: gh-pages
+        run: |
+          # ép Git dùng token khi push
+          git remote set-url origin https://${GIT_USER}:${GH_TOKEN}@github.com/abenla-devs/abenla-devs.github.io.git
+          npx docusaurus deploy --yes
