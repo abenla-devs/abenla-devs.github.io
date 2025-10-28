@@ -34,12 +34,12 @@ jobs:
 
       - name: Deploy to GitHub Pages
         env:
+          # token cá nhân bạn tạo, đã lưu trong Settings → Secrets → Actions
+          GH_TOKEN: ${{ secrets.PHUOC_TOKEN }}
           GIT_USER: tranvietphuoc
-          USE_SSH: false
+
           DEPLOYMENT_BRANCH: gh-pages
-          GITHUB_TOKEN: ${{ secrets.PHUOC_TOKEN }}
-          # ép Docusaurus dùng HTTPS có token
-          GIT_PASS: ${{ secrets.PHUOC_TOKEN }}
         run: |
-          git remote set-url origin https://$GIT_USER:${GITHUB_TOKEN}@github.com/abenla-devs/abenla-devs.github.io.git
-          npm run deploy
+          # ép Git dùng token khi push
+          git remote set-url origin https://${GIT_USER}:${GH_TOKEN}@github.com/abenla-devs/abenla-devs.github.io.git
+          npx docusaurus deploy --yes
