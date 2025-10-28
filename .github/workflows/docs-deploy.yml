@@ -37,6 +37,7 @@ jobs:
           # token cá nhân bạn tạo, đã lưu trong Settings → Secrets → Actions
           GH_TOKEN: ${{ secrets.PHUOC_TOKEN }}
           GIT_USER: tranvietphuoc
+
           DEPLOYMENT_BRANCH: gh-pages
         run: |
           # ép Git dùng token khi push
