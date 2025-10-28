@@ -1,0 +1,8 @@
+{
+  "label": "CRM module",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "Tài liệu module CRM của hệ thống Odoo."
+  }
+}

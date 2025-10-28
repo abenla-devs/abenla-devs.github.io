@@ -1,0 +1,8 @@
+{
+  "label": "Sale Module",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Tài liệu module Sales của hệ thống Odoo."
+  }
+}
