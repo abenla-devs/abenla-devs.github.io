@@ -26,3 +26,14 @@ jobs:
 
       - name: Build website
         run: npm run build
+
+      - name: Setup Git identity
+        run: |
+          git config --global user.name "tranvietphuoc"
+          git config --global user.email "tranvietphuoc@users.noreply.github.com"
+
+      - name: Deploy to GitHub Pages
+        env:
+          GIT_USER: tranvietphuoc
+          GITHUB_TOKEN: ${{ secrets.PHUOC_TOKEN }}  # dùng token cá nhân thay cho GITHUB_TOKEN
+        run: npm run deploy
