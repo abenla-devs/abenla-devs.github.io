@@ -23,12 +23,3 @@ jobs:
         run: npm ci
 
       - name: Build website
-        run: npm run build
-
-      - name: Setup Git identity
-        run: |
-          git config --global user.name "tranvietphuoc"
-          git config --global user.email "tranvietphuoc@users.noreply.github.com"
-
-      - name: Deploy to GitHub Pages
-        env:
