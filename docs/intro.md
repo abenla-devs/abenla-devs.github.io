@@ -2,4 +2,6 @@
 sidebar_position: 1
 ---
 
-# Trang tài liệu về các chức năng chính của Odoo V.19.0
+# Abenla Odoo ERP
+
+Tài liệu cho người dùng hệ thống Odoo ERP
