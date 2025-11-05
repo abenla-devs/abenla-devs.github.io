@@ -2,10 +2,10 @@
 sidebar_position: 1
 ---
 
-# Sơ đồ mindmap của module
+# Mindmap của module
 
 ```markmap initialExpandLevel=2
-- Abenla Odoo Documentation Modules
+- Sales Modules
   - Point of Sale (POS)
     - Core Functionalities
       - Start/Close Session
