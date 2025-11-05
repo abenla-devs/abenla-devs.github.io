@@ -30,3 +30,40 @@ sidebar_position: 1
 - Sales team là chức năng quản lý sales
 - Có **Rule base assignment** để auto gán leads cho salesperson
 - Có thể theo dõi báo cáo về hoạt động của sales team
+
+```mermaid
+mindmap
+  root((Odoo CRM Features & Analysis))
+    Acquire & Convert Leads/Opportunities
+      Lead Mining
+      Lead Enrichment
+      Partner Autocomplete (Enrich Contacts)
+      Create Opportunities from Web Contact Forms
+      Convert Leads into Opportunities
+    Assign and Track Leads
+      Predictive Lead Scoring
+      Rule-Based Assignment
+      Resellers
+    Pipeline Management & Organization
+      Sales Teams
+      Leads & Opportunities Lifecycle
+      Lost Leads/Opportunities
+      Merging Similar Leads/Opportunities
+      Create and Send Quotations
+      Mark Opportunity Won/Lost
+      Activities
+    Analyze Performance (Reporting)
+      Pipeline Analysis (CRM > Reporting > Pipeline)
+      Expected Revenue Report
+      Forecast Report (CRM > Reporting > Forecast)
+      Unattended Leads Report
+      Quality Leads Report
+      Lead Distribution Report
+      Marketing Attribution Reports (CRM > Reporting > Leads)
+    CRM Gamification
+      Motivates users through challenges, goals, and rewards
+      Requires 'CRM Gamification' App installation
+      Access via Settings > Gamification tools (Debug mode required)
+      Create Badges (Rewards)
+      Create Challenges
+```

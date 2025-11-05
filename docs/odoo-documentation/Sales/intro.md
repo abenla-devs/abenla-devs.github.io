@@ -2,6 +2,8 @@
 sidebar_position: 1
 ---
 
+
+
 # Tổng quan Sales
 
 - Bản giá/Báo giá là một tài liệu gửi đến khách hàng, trong đó chứa thông tin về chi phí, điều khoản ước tính cho hàng hóa hoặc dịch vụ.
@@ -41,3 +43,74 @@ sidebar_position: 1
     ![sale quotation community](./img/sales_quotation_com.png)
 
     ![sale quotaion enterprise](./img/sales_quotation.png)
+
+- Sơ đồ mindmap
+
+```markmap
+- Abenla Odoo Documentation Overview
+  - Point of Sale (POS)
+    - Core Functionalities
+      - Start/Close Session
+      - Sell Products (Qty, Price, Disc)
+      - Set Customers (Loyalty, Invoicing)
+      - Customer Notes
+      - Manage Cash Register (In/Out)
+      - Return and Refunds
+      - Analytics/Reporting
+    - Configuration
+      - Access POS Settings (Admin Only)
+      - Product Availability (Tick Point of Sale)
+      - PoS Product Categories
+        - Create New Category
+        - Assign to Products
+      - Payment Methods
+        - Cash
+        - Bank
+        - E-Wallet
+      - POS Users and Roles
+        - Cashier
+        - Manager Approval Features
+      - Hardware Setup
+        - Receipt Printer
+        - Barcode Scanner
+        - Cash Drawer
+        - IoT Box (Enterprise)
+    - Advanced Features (Enterprise Only)
+      - Loyalty Program
+      - Gift Cards & Vouchers
+      - Franchise / Multi-Branch Management
+      - Kitchen Display System (KDS)
+      - Self-Ordering Kiosk
+  - Inventory & Warehousing
+    - Realtime Stock Sync with POS
+    - Lot/Serial Tracking
+    - Expiry Management
+    - Multi-Warehouse Routing
+    - Delivery Order Automation
+  - Sales & CRM
+    - Sales Orders from POS
+    - Upsell & Cross Sell Suggestions
+    - CRM Lead and Opportunity Sync
+  - Finance & Accounting
+    - Daily Sales Summary Report
+    - Cash Control / Bank Deposits
+    - Invoicing Integration
+    - Payment Reconciliation
+  - E-Commerce Integration
+    - Unified Product Catalog
+    - Web Orders Sync to Warehouse
+    - Omni-Channel Pricing Policies
+  - Connectors
+    - Shopee Connector
+      - Sync Confirmed Orders (Shopee → Odoo)
+      - Sync Inventory (Odoo → Shopee FBM)
+      - Product Catalog Mapping (SKU/Int.Ref)
+      - Auto/Forced Order Sync Jobs
+      - FBM Delivery Label Fetch
+      - Batch Deposit Reconciliation
+    - Gelato (Print on Demand)
+      - Automated Order Fulfillment
+      - API Keys + Webhook Configuration
+      - Product Sync (Template ID Mapping)
+      - Order Placement (Single Vendor Limit)
+
