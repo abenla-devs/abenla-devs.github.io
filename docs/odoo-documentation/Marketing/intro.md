@@ -102,9 +102,30 @@ sidebar_position: 1
     - Manage Unsubscriptions (Blacklist)
       - Unsubscribe Link (Default at end of email)
       - Opt-out Reasons (Configurable)
-      - Blacklist (Exclude
-  - SMS
-
+      - Blacklist (Exclude Me option adds email to mail_blacklist)
+      - Blacklisted Email Addresses View (Ability to Unblacklist)
+    - Lost Leads Reactivation Email
+      - Minimum Requirements
+        - Recipients Model: Lead/crm.lead
+        - Blacklist Filter: is set
+        - Created On (Timeframe)
+        - Stage (Not in specific stages)
+        - Lost Reason
+        - Active Filter (Inactive/Active)
+      - Email Nurturing (Process to convert leads)
+    - Analyze Metrics
+      - View Metrics (Smart buttons on each mailing)
+      - Mass Mailing Analysis (Reporting)
+      - Opt-Out Report (Reporting)
+  - SMS Marketing
+    - Similar Interface to Email Marketing
+    - Mobile Field (In Mailing List Contacts)
+    - Link Tracker
+      - Must be created manually (No in-place tracking)
+      - Fields: Target Link, Page Title, Button Label
+      - UTM Fields: Mass Mailing, Campaign, Medium, Source
+  - ZNS Marketing
+  - ZaloOA Marketing
 ```
 
 # Marketing modules
