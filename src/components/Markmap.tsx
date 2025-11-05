@@ -10,7 +10,7 @@ const loadMarkmap = async () => {
 interface Props {
   content: string
   height?: string | number
-  initialExpandLevel?: number
+  initialExpandLevel?: number | string
 }
 
 export default function MarkmapComponent({ content, height = 800, initialExpandLevel }: Props) {
@@ -34,7 +34,11 @@ export default function MarkmapComponent({ content, height = 800, initialExpandL
         svgRef.current.innerHTML = ''
         if (disposed) return
 
-        const options = initialExpandLevel === undefined ? {} : { initialExpandLevel }
+        const level =
+          initialExpandLevel === undefined || initialExpandLevel === null
+            ? undefined
+            : Number(initialExpandLevel)
+        const options = Number.isFinite(level) ? { initialExpandLevel: level as number } : {}
         mm = Markmap.create(svgRef.current, options as any, root)
         setTimeout(() => mm?.fit?.(), 50)
       } catch (err) {
