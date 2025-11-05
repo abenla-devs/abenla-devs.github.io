@@ -2,16 +2,9 @@
 sidebar_position: 1
 ---
 
-# Marketing modules
-
-Tài liệu về các module phục vụ cho việc marketing của doanh nghiệp trong Odoo
-
-Module này bao gồm **Email Marketing**, **SMS Marketing**, **ZNS/OA Marketing**, **Marketing Automation**
-
 # Sơ đồ mindmap của module
 
-```markmap
-initialExpandLevel=2
+```markmap initialExpandLevel=2
 - Odoo Marketing Modules
   - Marketing Automation
     - Configuration
@@ -110,4 +103,12 @@ initialExpandLevel=2
       - Unsubscribe Link (Default at end of email)
       - Opt-out Reasons (Configurable)
       - Blacklist (Exclude
+  - SMS
+
 ```
+
+# Marketing modules
+
+Tài liệu về các module phục vụ cho việc marketing của doanh nghiệp trong Odoo
+
+Module này bao gồm **Email Marketing**, **SMS Marketing**, **ZNS/OA Marketing**, **Marketing Automation**

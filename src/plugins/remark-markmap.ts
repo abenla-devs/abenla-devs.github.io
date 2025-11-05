@@ -20,13 +20,11 @@ const remarkMarkmap: Plugin = () => {
         while ((m = re.exec(meta))) {
           const key = m[1]
           const raw = m[2]
-          const isNumber = /^-?\d+(?:\.\d+)?$/.test(raw)
           extraAttrs.push({
             type: 'mdxJsxAttribute',
             name: key,
-            value: isNumber
-              ? { type: 'mdxJsxAttributeValueExpression', value: raw }
-              : raw,
+            // Luôn để literal string; component sẽ tự parse số
+            value: raw,
           })
         }
       }
