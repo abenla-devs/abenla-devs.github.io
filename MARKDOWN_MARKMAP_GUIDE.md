@@ -10,16 +10,24 @@ Tài liệu này chỉ để lưu trên GitHub (không render vào site). Dùng 
 - Code inline: \`code\`
 - Code block:
 
+````md
 ```ts
 function hello() {
   console.log("Hello");
 }
 ```
+````
 
 - Ảnh: đặt vào `static/img` và tham chiếu:
 
 ```md
 ![mô tả](/img/your-image.png)
+```
+
+- Link:
+
+```md
+[text](https://...)
 ```
 
 ## 2) Chèn mindmap với Markmap
@@ -42,20 +50,24 @@ Thêm ngay sau `markmap` theo dạng `key=value` (cách nhau bằng khoảng tr�
 
 Ví dụ:
 
+````md
 ```markmap initialExpandLevel=2 height=480
 - Root
   - A
     - A1
   - B
 ```
+````
 
 Ví dụ mở 1 tầng:
 
+````md
 ```markmap initialExpandLevel=1
 - Tài liệu
   - Giới thiệu
   - Hướng dẫn
 ```
+````
 
 ## 3) Dùng trực tiếp trong MDX
 
@@ -89,5 +101,10 @@ npm run clear && npm start
   1. Cài [NotebookLLM Mindmap Extractor](https://chromewebstore.google.com/detail/notebooklm-mindmap-extrac/ecikohbjgbjnlbldbjnceohmbhipipcp?authuser=0&hl=en-GB)
   2. Mở `NotebookLLM` chọn `Mind Map` từ tab `Studio`, click `Expand all nodes`
   3. Mở NotebookLLM Mindmap Extractor, click **Detect Mindmap**, chọn **Export Format** (nên chọn opml), click **Export Mindmap** để lấy file về
-  4. Vào chatgpt hoặc gemini,.. tải file vừa export kèm promt _Using this OPML file, I need you to convert the structure into Markdown with `markmap` code fences so that it can be compiled with Markmap._
+  4. Vào chatgpt hoặc gemini,.. tải file vừa export kèm promt:
+
+  ```txt
+  Using this OPML file, I need you to convert the structure into Markdown with markmap code fences so that it can be compiled with Markmap.
+  ```
+
   5. Copy kết quả vào file markdown dưới code fences markmap
