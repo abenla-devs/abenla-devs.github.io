@@ -1,5 +1,5 @@
 ---
-sidebar_postion: 13
+sidebar_postion: 4
 ---
 
 # Resellers

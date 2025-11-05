@@ -1,5 +1,5 @@
 ---
-sidebar_posistion: 7
+sidebar_posistion: 6
 ---
 
 # Quotation deadlines

@@ -1,5 +1,5 @@
 ---
-sidebar_postion: 14
+sidebar_postion: 4
 ---
 
 # Invoicing based on time and materials

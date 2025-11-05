@@ -1,8 +1,8 @@
 {
-  "label": "Marketing module",
-  "position": 2,
+  "label": "Marketing modules",
+  "position": 3,
   "link": {
     "type": "generated-index",
-    "description": "Tài liệu module Marketing của hệ thống Odoo."
+    "description": "Tài liệu Marketings"
   }
 }
