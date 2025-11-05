@@ -13,7 +13,7 @@ interface Props {
   initialExpandLevel?: number | string
 }
 
-export default function MarkmapComponent({ content, height = 800, initialExpandLevel }: Props) {
+export default function MarkmapComponent({ content, height = 400, initialExpandLevel }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null)
 
   useEffect(() => {
