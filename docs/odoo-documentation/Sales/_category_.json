@@ -1,8 +1,8 @@
 {
-  "label": "Sales Module",
+  "label": "Sales",
   "position": 2,
   "link": {
     "type": "generated-index",
-    "description": "Tài liệu module Sales"
+    "description": "Tài liệu module Sales và các modules liên quan như PoS, Subscriptions"
   }
 }
