@@ -2,10 +2,10 @@
 sidebar_position: 1
 ---
 
-# Sơ đồ mindmap của module
+# Mindmap của module
 
 ```markmap initialExpandLevel=2
-- Odoo Marketing Modules
+- Marketing Modules
   - Marketing Automation
     - Configuration
       - Campaigns

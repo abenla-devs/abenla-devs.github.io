@@ -2,10 +2,10 @@
 sidebar_position: 1
 ---
 
-# Sơ đồ mindmap của module
+# Mindmap của module
 
 ```markmap initialExpandLevel=2
-- Odoo CRM Features & Analysis
+- CRM Features & Analysis
   - Acquire & Convert Leads/Opportunities
     - Lead Mining
       - Generate leads into Odoo DB
