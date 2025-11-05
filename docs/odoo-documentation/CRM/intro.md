@@ -31,39 +31,176 @@ sidebar_position: 1
 - Có **Rule base assignment** để auto gán leads cho salesperson
 - Có thể theo dõi báo cáo về hoạt động của sales team
 
-```mermaid
-mindmap
-  root((Odoo CRM Features & Analysis))
-    Acquire & Convert Leads/Opportunities
-      Lead Mining
-      Lead Enrichment
-      Partner Autocomplete (Enrich Contacts)
-      Create Opportunities from Web Contact Forms
-      Convert Leads into Opportunities
-    Assign and Track Leads
-      Predictive Lead Scoring
-      Rule-Based Assignment
-      Resellers
-    Pipeline Management & Organization
-      Sales Teams
-      Leads & Opportunities Lifecycle
-      Lost Leads/Opportunities
-      Merging Similar Leads/Opportunities
-      Create and Send Quotations
-      Mark Opportunity Won/Lost
-      Activities
-    Analyze Performance (Reporting)
-      Pipeline Analysis (CRM > Reporting > Pipeline)
-      Expected Revenue Report
-      Forecast Report (CRM > Reporting > Forecast)
-      Unattended Leads Report
-      Quality Leads Report
-      Lead Distribution Report
-      Marketing Attribution Reports (CRM > Reporting > Leads)
-    CRM Gamification
-      Motivates users through challenges, goals, and rewards
-      Requires 'CRM Gamification' App installation
-      Access via Settings > Gamification tools (Debug mode required)
-      Create Badges (Rewards)
-      Create Challenges
+# Sơ đồ mindmap của module
+
+```markmap
+map initialExpandLevel=2
+- Odoo CRM Features & Analysis
+  - Acquire & Convert Leads/Opportunities
+    - Lead Mining
+      - Generate leads into Odoo DB
+      - Filters: Country, Industry, Company Size
+      - Requires IAP credits (Pricing)
+      - Configuration: Activate Lead Mining in Settings
+    - Lead Enrichment
+      - Paid service (IAP credits)
+      - Provides corporate data (Name, Industry, Size)
+      - Based on email domain
+      - Methods: Automatic (Cron job) or Manual (On demand)
+    - Partner Autocomplete (Enrich Contacts)
+      - Paid feature
+      - Fills company data based on name input
+      - Configuration: Activate in Settings > Contacts
+    - Create Opportunities from Web Contact Forms
+      - Customize forms via Web Editor
+      - Action: Create an Opportunity (or Lead if active)
+      - Auto-assign Sales Team/Salesperson
+    - Convert Leads into Opportunities
+      - Leads act as final review step
+      - Configuration: Activate 'Leads' in Settings
+      - Conversion Actions (Popup)
+        - Create new opportunity
+        - Merge with existing opportunity
+        - Assign Salesperson/Team
+        - Customer: Create New or Link Existing
+  - Assign and Track Leads
+    - Predictive Lead Scoring
+      - Automatic assignment based on winning probability
+      - Machine-learning model using historical CRM data
+      - Uses Naive Bayes formula
+      - Data improves with more opportunities
+      - Variables (B)
+        - Salesperson, Source, Language, Country
+        - Activated: State, Country, Phone/Email Quality, Source, Language, Tags
+        - Always Affecting: Stage, Team
+      - Manual Probability Change possible (Restored by AI icon)
+    - Rule-Based Assignment
+      - Assign leads based on defined rules (e.g., Probability)
+      - Configuration: Activate in Settings
+      - Running Options: Manually or Repeatedly (Auto-assignment)
+      - Rules configured per Sales Team/Member (Edit Domain)
+      - Option to Skip Auto Assignment
+    - Resellers
+      - Leads forwarded automatically or manually
+      - Configuration: Partner Levels (Gold, Silver, Bronze) with Level Weight
+      - Partner Activations (Status)
+      - Assignment based on Level and Location
+  - Pipeline Management & Organization
+    - Sales Teams
+      - Manage teams with separate rules and goals
+      - Fields: Name, Team Leader, Email Alias (Auto Lead/Opp Creation)
+      - Invoice Target (Monthly expected revenue)
+      - Support Multi Teams (Salesperson on multiple teams)
+      - Dashboard: View pipeline, quotations, invoice progress
+    - Leads & Opportunities Lifecycle
+      - Pipeline: Kanban view with stages (Drag-and-drop)
+      - Probabilities assigned per stage (Editable)
+      - Automation actions customizable per stage
+    - Lost Leads/Opportunities
+      - Marking as Lost requires Lost Reason
+      - Lost Reasons configurable in Settings
+      - View Lost via CRM Filters
+      - Restore by Unarchiving
+      - Archived Opportunities hidden from Reports
+    - Merging Similar Leads/Opportunities
+      - Identified by similar phone/email
+      - Merge via 'Similar Leads' button (Irreversible process)
+      - Merged result is active; data logged in chatter
+      - Situations to Avoid Merging
+        - Different contacts in the same organization
+        - Multiple independent salespeople assigned
+        - Similar but not perfectly matching contact info
+    - Create and Send Quotations
+      - Requires Sales app installed
+      - Created from Opportunity form ('New Quotation')
+      - Customer Handling (if blank)
+        - Create new customer
+        - Link to existing customer
+        - Do not link to a customer
+      - Use Quotation Templates
+      - Quotation Date, Expiration, Pricelist, Payment Term fields
+      - Order Lines: Add Products (Manual or Catalog), Sections
+      - Preview via Customer Portal
+      - Send via Email (Status becomes 'Quotation Sent')
+    - Mark Opportunity Won/Lost
+      - Buttons available in form view
+      - Won/Lost determines pipeline cleanness
+    - Activities
+      - Tasks attached to records (Call, Email, Meeting, To Do)
+      - Scheduled on chatter, kanban, list views
+      - Activity Types
+        - Configurable (Name, Action, Default User/Summary)
+        - Chaining Type: Suggest Next or Trigger Next Activity
+      - Activity Plans
+        - Create plans (Activities to Create tab)
+        - Set Assignment (Ask at launch/Default user)
+        - Launch plan on Opportunity via Scheduled Activity popup
+      - Must be marked 'Done' to ensure accurate pipeline status
+  - Analyze Performance (Reporting)
+    - Pipeline Analysis (CRM > Reporting > Pipeline)
+      - Tracks leads/opportunities by stage
+      - View Options
+        - Graph (Bar, Line, Pie)
+        - Pivot (Download XLSX, Flip Axis)
+        - List
+        - Cohort (Enterprise Only)
+      - Measurement Options
+        - Count (Default)
+        - Expected Revenue / MRR
+        - Prorated Revenue / MRR
+        - Days to Assign/Close/Convert
+      - Custom Filters and Groups available
+      - Reports can be Saved (Favorites) or Shared
+      - Win/Loss Reports
+        - Formula: Opportunities Won / Opportunities Loss
+        - Filtered by active/inactive leads over time
+    - Expected Revenue Report
+      - Total cash value of leads expected to close by a date
+      - Measure: Expected Revenue in Pipeline Analysis
+      - Filters: Expected Closing Date, Exclude Unassigned, Specific Sales Teams
+    - Forecast Report (CRM > Reporting > Forecast)
+      - Views upcoming opportunities (Default 4 months)
+      - Grouped by Expected Closing Date (Editable by drag/drop)
+      - Prorated Revenue
+        - Calculated: Expected Revenue x Probability
+        - Auto-updated when opportunities move month-to-month
+    - Unattended Leads Report
+      - Identifies active leads with scheduled/overdue activities
+      - Requires consistent use of Activities feature
+      - Filters: Past Due Activities (<= Today), Exclude Unassigned, Specific Teams
+    - Quality Leads Report
+      - Tracks leads likely to result in sales
+      - Quality Filters (Examples)
+        - Email/Phone set
+        - Source, Stage, Medium, Campaign
+        - Exclude specific Lost Reasons
+      - Grouped by Salesperson
+    - Lead Distribution Report
+      - Checks fair distribution among salespeople
+      - Filters: Lead Creation Date, Sales Team, Contact Method (Email/Phone), Active Status
+    - Marketing Attribution Reports (CRM > Reporting > Leads)
+      - Analyzes lead source and marketing impact
+      - Uses UTM Parameters
+        - Tracking modules embedded in URLs
+        - Parameters: Campaign, Medium, Source
+      - Custom Filters and Nested Grouping available
+      - Export options (Pivot View, XLSX)
+  - CRM Gamification
+    - Motivates users through challenges, goals, and rewards
+    - Requires 'CRM Gamification' App installation
+    - Access via Settings > Gamification tools (Debug mode required)
+    - Create Badges (Rewards)
+      - Awarded upon challenge completion
+      - Allowance to Grant
+        - Everyone (Manual)
+        - Selected list of users
+        - People having some badges
+        - No one, assigned through challenges
+      - Monthly Limited Spending option
+    - Create Challenges
+      - Assign Challenge to (Assignment Rules)
+      - Periodicity (Auto evaluation time frame)
+      - Add Goals (Based on Goal Definition/Target)
+      - Add Rewards (Badges for 1st User, Every Succeeding User)
+      - Start Challenge button to activate
 ```

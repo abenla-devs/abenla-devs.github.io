@@ -21,20 +21,22 @@
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.0.0",
     "katex": "^0.16.25",
+    "markmap-autoloader": "^0.18.12",
     "mermaid": "^11.12.1",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "rehype-katex": "^7.0.1",
-    "remark-math": "^6.0.0"
+    "remark-math": "^6.0.0",
+    "markmap-lib": "^0.18.12",
+    "markmap-view": "^0.18.12"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.9.1",
     "@docusaurus/tsconfig": "3.9.1",
     "@docusaurus/types": "3.9.1",
+    "@types/react": "^19.2.2",
     "gh-pages": "^6.3.0",
-    "markmap-lib": "^0.18.12",
-    "markmap-view": "^0.18.12",
     "typescript": "~5.6.2"
   },
   "browserslist": {

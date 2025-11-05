@@ -30,3 +30,15 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* Bảo đảm ảnh trong nội dung không bị kéo dãn theo chiều dọc */
+.markdown img {
+  height: auto !important;
+  max-width: 100%;
+}
+
+/* Giới hạn style cho markmap SVG, tránh ảnh hưởng phần khác */
+.markdown svg[mm-graph] {
+  display: block;
+  max-width: 100%;
+}

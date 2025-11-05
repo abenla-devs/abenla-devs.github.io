@@ -2,8 +2,6 @@
 sidebar_position: 1
 ---
 
-
-
 # Tổng quan Sales
 
 - Bản giá/Báo giá là một tài liệu gửi đến khách hàng, trong đó chứa thông tin về chi phí, điều khoản ước tính cho hàng hóa hoặc dịch vụ.
@@ -44,10 +42,11 @@ sidebar_position: 1
 
     ![sale quotaion enterprise](./img/sales_quotation.png)
 
-- Sơ đồ mindmap
+# Sơ đồ mindmap của module
 
 ```markmap
-- Abenla Odoo Documentation Overview
+map initialExpandLevel=2
+- Sales
   - Point of Sale (POS)
     - Core Functionalities
       - Start/Close Session
@@ -114,3 +113,4 @@ sidebar_position: 1
       - Product Sync (Template ID Mapping)
       - Order Placement (Single Vendor Limit)
 
+```

@@ -1,6 +1,7 @@
 import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
+import remarkMarkmap from "./src/plugins/remark-markmap";
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -37,18 +38,18 @@ const config: Config = {
     locales: ["en"],
   },
 
-  markdown: {
+  /*  markdown: {
     mermaid: true,
   },
 
-  themes: ["@docusaurus/theme-mermaid"],
+  themes: ["@docusaurus/theme-mermaid"], */
 
   presets: [
     [
       "classic",
       {
         docs: {
-          remarkPlugins: [require("remark-math")],
+          remarkPlugins: [remarkMarkmap, require("remark-math")],
           rehypePlugins: [require("rehype-katex")],
           sidebarPath: "./sidebars.ts",
           // Please change this to your repo.
