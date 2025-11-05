@@ -82,3 +82,12 @@ npm run clear && npm start
 ## Tham khảo
 
 - Markmap: https://github.com/markmap/markmap
+
+## Lưu ý
+
+- Quy trình lấy mindmap từ `NotebookLLM`:
+  1. Cài [NotebookLLM Mindmap Extractor](https://chromewebstore.google.com/detail/notebooklm-mindmap-extrac/ecikohbjgbjnlbldbjnceohmbhipipcp?authuser=0&hl=en-GB)
+  2. Mở `NotebookLLM` chọn `Mind Map` từ tab `Studio`, click `Expand all nodes`
+  3. Mở NotebookLLM Mindmap Extractor, click **Detect Mindmap**, chọn **Export Format** (nên chọn opml), click **Export Mindmap** để lấy file về
+  4. Vào chatgpt hoặc gemini,.. tải file vừa export kèm promt _Using this OPML file, I need you to convert the structure into Markdown with `markmap` code fences so that it can be compiled with Markmap._
+  5. Copy kết quả vào file markdown dưới code fences markmap
