@@ -1,8 +1,7 @@
 {
   "label": "Odoo modules",
-  "position": 1,
   "link": {
     "type": "generated-index",
-    "description": "Tài liệu các modules của hệ thống Odoo."
+    "description": "Tài liệu các modules Odoo"
   }
 }

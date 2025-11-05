@@ -1,5 +1,5 @@
 ---
-sidebar_position: 14
+sidebar_position: 3
 ---
 
 # Serial numbers and lots

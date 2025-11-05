@@ -1,5 +1,5 @@
 ---
-sidebar_postion: 11
+sidebar_postion: 1
 ---
 
 # Invoice based on delivered or ordered quantities

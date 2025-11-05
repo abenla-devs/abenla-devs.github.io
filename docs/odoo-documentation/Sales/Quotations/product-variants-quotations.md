@@ -1,5 +1,5 @@
 ---
-sidebar_position: 9
+sidebar_position: 8
 ---
 
 # Product variants on quotations and sales orders
