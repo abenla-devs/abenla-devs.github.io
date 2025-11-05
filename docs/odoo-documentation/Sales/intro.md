@@ -5,73 +5,171 @@ sidebar_position: 1
 # Sơ đồ mindmap của module
 
 ```markmap initialExpandLevel=2
-- Sales
+- Abenla Odoo Documentation Modules
   - Point of Sale (POS)
     - Core Functionalities
       - Start/Close Session
-      - Sell Products (Qty, Price, Disc)
-      - Set Customers (Loyalty, Invoicing)
-      - Customer Notes
-      - Manage Cash Register (In/Out)
+      - Sell Products
+      - Set Customers/Notes
       - Return and Refunds
+      - Manage Cash Register (In/Out)
       - Analytics/Reporting
     - Configuration
-      - Access POS Settings (Admin Only)
-      - Product Availability (Tick Point of Sale)
+      - Access POS Settings
+      - Make Products Available
       - PoS Product Categories
-        - Create New Category
-        - Assign to Products
+        - Assign Categories
+        - Restrict Categories
+      - IoT System Connection
+      - ePOS Printers
+        - Directly Supported
+        - IoT System Integration
+        - Self-signed certificate
+      - Secure Connection (HTTPS)
+    - Pricing Features
+      - Discounts (Manual/Global/Time-limited)
+      - Discount Tags (Barcode Scanner)
+      - Loyalty Programs
+      - Pricelists
+        - Flexible Pricelists
+        - Create Pricelists
+      - Flexible Taxes (Fiscal Position)
+      - Cash Rounding
+      - Electronic Shelf Labels (ESL)
+    - Hardware Integration
+      - Customer Display
+        - Configuration (USB/HDMI/IoT)
+        - Opening Display
+      - Scale
+        - IoT System Required
+        - Product Configuration (per Kg)
+      - Barcode Scanner
+    - Restaurant Features
+      - Floors and Tables
+      - Booking (Enterprise)
+      - Order Management (Transfer/Merge)
+      - Presets (Dine In/Takeout/Delivery)
+      - Courses (Kitchen Printing)
+      - Bill Splitting
+      - Tips (Configuration/Payment)
+      - Default Start Screen
+    - Orders & Products
+      - Product Combos
+      - Self-Ordering (QR Menu/Kiosk)
+      - Sales Orders (Down Payment/Settle)
+      - Barcodes (Assign/Use)
+      - Serial Numbers and Lots
+      - Ship Later
+    - User/Receipts/Payments
+      - Multi-employee Management
+        - Access Rights (Minimal/Basic/Advanced)
+        - Logging In (PIN/Badges)
+      - Receipts and Invoices
+        - Custom Header/Footer
+        - Automatic Printing
+        - Invoice a Customer
+        - QR Codes to Generate Invoices
       - Payment Methods
-        - Cash
-        - Bank
-        - E-Wallet
-      - POS Users and Roles
-        - Cashier
-        - Manager Approval Features
-      - Hardware Setup
-        - Receipt Printer
-        - Barcode Scanner
-        - Cash Drawer
-        - IoT Box (Enterprise)
-    - Advanced Features (Enterprise Only)
-      - Loyalty Program
-      - Gift Cards & Vouchers
-      - Franchise / Multi-Branch Management
-      - Kitchen Display System (KDS)
-      - Self-Ordering Kiosk
-  - Inventory & Warehousing
-    - Realtime Stock Sync with POS
-    - Lot/Serial Tracking
-    - Expiry Management
-    - Multi-Warehouse Routing
-    - Delivery Order Automation
-  - Sales & CRM
-    - Sales Orders from POS
-    - Upsell & Cross Sell Suggestions
-    - CRM Lead and Opportunity Sync
-  - Finance & Accounting
-    - Daily Sales Summary Report
-    - Cash Control / Bank Deposits
-    - Invoicing Integration
-    - Payment Reconciliation
-  - E-Commerce Integration
-    - Unified Product Catalog
-    - Web Orders Sync to Warehouse
-    - Omni-Channel Pricing Policies
+        - Customer Account (Deposit/Settle Debt)
+        - QR Code Payments (Bank App)
+        - Configuration (Journal/Integration)
+      - Marketing Features
+        - Storing Contact Details
+        - Email Marketing
+        - WhatsApp Marketing
+  - Sales Module
+    - Quotation Management
+      - Tạo Quotation (Customer/Pricelist/Terms)
+      - Quotation Templates
+      - Quotation Deadlines/Expiration
+      - Optional Products (Cross-selling)
+      - Online Signatures for Confirmation
+      - Online Payment Order Confirmation
+      - PDF Quote Builder (Dynamic Text)
+      - Pro-forma Invoices
+      - Mass Cancel Quotations/Orders
+        - Creation and Editing Rules
+        - Recurring Prices (Subscriptions)
+    - Pricing and Products
+      - Discounts (Product Lines/Global/Fixed)
+        - Rental Rules
+        - Customer Application
+      - Discount & Loyalty Programs (Sales/eCommerce/PoS)
+      - Foreign Currencies
+      - eWallets and Gift Cards
+    - Product Management
+      - Product Variants
+        - Attributes (Type/Creation Mode)
+        - Variant Grid Entry
+        - Product Configurator
+      - Import Products (Template/Relation Fields)
+      - Product Images with Google Images API
+    - Order and Delivery
+      - General Sale Flow
+      - Deliveries & Invoices to Different Addresses
+      - Returns and Refunds (Before/After Invoicing)
+    - Commissions (Sales Incentives)
+      - Purpose and Setup
+      - Structure (Based On: Targets/Achievements)
+      - Target-based Plans (Levels)
+      - Achievement-based Plans (Percentage of Value)
+      - Performance Measures (Amount/Quantity/Margin/MRR)
+      - Approval and Management
+  - Invoicing Methods
+    - Down Payment
+      - Create Invoices (Percentage/Fixed Amount)
+      - Income Account Modification
+      - Impact of 100% Down Payment
+      - Credit Note Handling
+    - Invoicing Policy
+      - Invoice What Is Ordered (Default)
+      - Invoice What Is Delivered
+      - Impact on Sales Flow (Inventory App)
+    - Project Billing
+      - Invoice Project Milestones (Create Milestones/Tasks)
+      - Invoicing Time and Materials
+        - Service Product Configuration (Timesheets)
+        - Invoice Time Spent
+        - Expense Reinvoicing (Add/Invoice Expenses)
+        - Purchase Reinvoicing (Add/Invoice Purchase)
+      - Reinvoice Expenses to Customers
+  - Subscriptions Module
+    - Setup and Configuration
+      - Recurring Plans (Billing Period/Self-Service Options)
+      - Product Form Configuration (Service Type)
+      - Create Subscriptions Quotation
+      - Subscriptions in eCommerce Shop
+    - Lifecycle Management
+      - Upsell Subscriptions
+      - Renew Subscriptions (Manual Renewal)
+      - Close Subscriptions (Closable option/Admin/Customer View)
+    - Automated Processes
+      - Subscriptions and Automatic Payments (Tokenization)
+      - Scheduled Actions
+        - Generate Recurring Invoices and Payments
+        - Subscriptions Expiration (Automatic Closing)
+    - Reporting
+      - Subscription Reports (Quantity/Revenue/Status)
+      - Retention Analysis
+      - MRR Breakdown
+      - MRR Timeline
   - Connectors
     - Shopee Connector
-      - Sync Confirmed Orders (Shopee → Odoo)
-      - Sync Inventory (Odoo → Shopee FBM)
-      - Product Catalog Mapping (SKU/Int.Ref)
-      - Auto/Forced Order Sync Jobs
-      - FBM Delivery Label Fetch
-      - Batch Deposit Reconciliation
-    - Gelato (Print on Demand)
-      - Automated Order Fulfillment
-      - API Keys + Webhook Configuration
-      - Product Sync (Template ID Mapping)
-      - Order Placement (Single Vendor Limit)
-
+      - Synchronize Confirmed Orders (Shopee to Odoo)
+      - Synchronize Inventory (Odoo to Shopee - FBM)
+      - Multiple Accounts/Marketplaces Supported
+      - Configuration (API Endpoint/Credentials)
+      - Product Catalog Mapping (SKU to Internal Reference)
+      - Order Synchronization (Status Based/Force Sync)
+      - Manage Deliveries in FBM (Shipping Label Fetch)
+      - Accounting/Reporting (Dedicated Journal/Sales Team)
+    - Gelato Connector (Print-on-Demand)
+      - Sync Sales Orders for Automated Fulfillment
+      - Create/Manage Gelato Products in Odoo
+      - Configuration (API Keys/Webhooks)
+      - Product Synchronization (Template ID/Variants/Images)
+      - Ordering Gelato Products (Shipping Options)
+      - Order Limit (Only Gelato products per SO)
 ```
 
 # Tổng quan Sales
