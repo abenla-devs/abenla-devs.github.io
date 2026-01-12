@@ -38,11 +38,11 @@ const config: Config = {
     locales: ["en"],
   },
 
-  /*  markdown: {
+  markdown: {
     mermaid: true,
   },
 
-  themes: ["@docusaurus/theme-mermaid"], */
+  themes: ["@docusaurus/theme-mermaid"],
 
   presets: [
     [
@@ -158,6 +158,9 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
+    },
+    mermaid: {
+      theme: {light: 'neutral', dark: 'forest'},
     },
   } satisfies Preset.ThemeConfig,
 };
