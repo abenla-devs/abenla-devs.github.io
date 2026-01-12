@@ -231,6 +231,7 @@ Quản lý các mẫu thiết kế có sẵn để tái sử dụng.
 | Field Name    | Type      | Description                                                                             |
 | :------------ | :-------- | :-------------------------------------------------------------------------------------- |
 | `name`        | Char      | Tên mẫu (VD: "Bộ nhận diện Brand X").                                                   |
+| `is_default`  | Boolean   | Default=False. Nếu True, mẫu này sẽ được dùng mặc định cho các mã tạo đơn lẻ.           |
 | `config_json` | Text      | Chứa cấu hình chi tiết cho việc Render ảnh (Style, Color, Logo). Xem cấu trúc bên dưới. |
 | `usage`       | Selection | Gợi ý sử dụng (`product`, `badge`, `coupon`).                                           |
 
@@ -347,6 +348,13 @@ def generate_qr(self, name, model, res_id, type='dynamic', target_url=None, stat
     # 1. Validation basics
     if type == 'dynamic' and not target_url:
         raise ValidationError("Dynamic QR requires a Target URL.")
+
+    # 2. Get Template (Priority: Option > Default)
+    template_id = options.get('design_template_id')
+    if not template_id:
+        default_template = self.env['qr.template'].search([('is_default', '=', True)], limit=1)
+        if default_template:
+            template_id = default_template.id
 
     # 2. Generate UUID
     uuid = self._generate_unique_uuid()
@@ -482,10 +490,177 @@ def get_image(self, format=None, **override_config):
 
 Phần này mô tả đặc tả kỹ thuật để Dev có thể code trực tiếp.
 
-### 5.1. Anti-Counterferiting & Warranty (`kindoo_product_qrcode`)
+### 5.1. Sales & Loyalty (`kindoo_sales_qrcode`) - Ưu tiên
+
+- **Mục đích:** Tăng cường trải nghiệm khách hàng thông qua việc tích hợp mã QR vào quy trình bán hàng (Coupon) và chăm sóc khách hàng (Loyalty Points).
+
+#### A. Coupon Voucher (Offline to Online)
+
+Kịch bản: Khách hàng nhận được tờ rơi/voucher giấy có in mã QR. Khi quét, voucher tự động được áp dụng vào giỏ hàng trên Website Thương mại điện tử.
+
+**Quy trình nghiệp vụ (Workflow):**
+
+```mermaid
+sequenceDiagram
+    participant Admin as Marketing Manager
+    participant Odoo as Odoo System
+    participant Customer as Customer
+    participant Web as Website/Controller
+
+    Admin->>Odoo: 1. Tạo chương trình Coupon & Batch QR
+    Odoo-->>Admin: Trả về file PDF chứa 1000 mã QR
+    Admin->>Customer: 2. Phân phối mã QR thông qua email, zalo, app,...
+    Customer->>Web: 3. Quét mã QR (Camera)
+    Web->>Odoo: 4. Check hiệu lực & Trạng thái QR
+    alt QR Valid
+        Odoo->>Odoo: 5. Apply mã giảm giá vào Order hiện tại
+        Odoo-->>Web: Redirect về Giỏ hàng (Đã giảm giá)
+        Web-->>Customer: Hiển thị giỏ hàng đã update
+    else QR Invalid/Expired
+        Web-->>Customer: Báo lỗi
+    end
+```
+
+**Cấu trúc dữ liệu (Data Structure):**
+
+| Model            | Field               | Type     | Description                                                         |
+| :--------------- | :------------------ | :------- | :------------------------------------------------------------------ |
+| `coupon.program` | `qr_code_config_id` | Many2one | Cấu hình giao diện QR (Màu sắc, Logo) áp dụng cho chương trình này. |
+| `coupon.coupon`  | `qr_code_id`        | Many2one | Link tới bảng `qr.code` quản lý lượt quét và thống kê.              |
+| `qr.code`        | `coupon_id`         | Many2one | Link ngược lại Coupon để truy xuất thông tin giảm giá.              |
+
+**Chi tiết kỹ thuật:**
+
+1.  **Generate:** Campaign Manager tạo Coupon -> Hệ thống sinh QR Dynamic theo Batch.
+2.  **Target:** `target_url` trỏ về: `/sales/coupon/scan?code=VIP2025`.
+3.  **Controller:**
+
+    ```python
+    @http.route('/sales/coupon/scan', type='http', auth='public', website=True)
+    def scan_coupon(self, code, **kw):
+        # 1. Lấy Sale Order hiện tại (từ session)
+        order = request.website.sale_get_order(force_create=True)
+
+        # 2. Gọi logic Apply Coupon của module sale_coupon
+        status = request.env['sale.coupon.apply.code'].sudo().apply_coupon(order, code)
+
+        if status.get('error'):
+             return request.render('website_sale.cart', {'error_msg': status['error']})
+
+        # 3. Thành công -> Redirect về Giỏ hàng
+        return request.redirect('/shop/cart')
+    ```
+
+#### B. Loyalty Claim (Tích điểm từ Hóa đơn)
+
+Kịch bản: Tối ưu hóa trải nghiệm khách hàng tại quầy (POS).
+
+- **Ưu tiên 1 (Auto):** Nếu Salesman đã chọn khách hàng trên POS -> Tích điểm NGAY LẬP TỨC khi thanh toán.
+- **Ưu tiên 2 (Self-Service):** Nếu khách hàng vội hoặc chưa cung cấp thông tin -> In mã QR trên hóa đơn. Khách về nhà tự quét để claim điểm.
+
+**Quy trình nghiệp vụ (Workflow):**
+
+```mermaid
+flowchart TD
+    A["POS Order Complete"] --> B{"Salesman chọn KH?"}
+    B -- YES --> C["Auto: Cộng điểm ngay cho Member"]
+    C --> D["Mark Invoice: Claimed = True"]
+    D --> E("In Hóa đơn không cần QR hoặc QR Info")
+
+    B -- NO --> F["Chưa chọn KH (GUEST)"]
+    F --> G["Generate Backup QR trên Hóa đơn"]
+    G --> H["Khách hàng nhận Hóa đơn"]
+    H -->|Về nhà quét QR| I{"Đã Login?"}
+    I -- No --> J["Đăng ký / Đăng nhập"]
+    J --> K{"Check QR Token"}
+    I -- Yes --> K
+
+    K -- Invalid/Used --> L["Báo lỗi: Đã dùng"]
+    K -- Valid --> M["Cộng điểm & Link User vào Invoice"]
+    M --> N["Mark Invoice: Claimed = True"]
+```
+
+**Cấu trúc dữ liệu (Data Structure):**
+
+| Model          | Field             | Type     | Description                                          |
+| :------------- | :---------------- | :------- | :--------------------------------------------------- |
+| `account.move` | `loyalty_qr_id`   | Many2one | Link tới `qr.code` để generate ảnh QR.               |
+| `account.move` | `loyalty_claimed` | Boolean  | `True` nếu đã tích điểm thành công (Auto hoặc Scan). |
+| `account.move` | `loyalty_points`  | Integer  | Số điểm dự kiến nhận được từ hóa đơn này.            |
+| `pos.order`    | `loyalty_points`  | Integer  | Số điểm đã tích lũy ngay tại quầy (Sync về Invoice). |
+
+**Chi tiết kỹ thuật:**
+
+1.  **POS Integration (`point_of_sale`)**:
+
+    - **Logic tại POS JavaScript:** Khi Cashier click "Validate" (Thanh toán):
+      - Nếu `order.get_client()` != null:
+        - Gọi RPC `action_pos_claim_points(order_uid, partner_id)`.
+        - Hệ thống tính điểm và cộng ngay lập tức.
+    - **Backend (`pos.order`):**
+      - Khi Order sync về Server -> Tạo Invoice.
+      - Set `invoice.loyalty_claimed = True` (vì đã cộng ở POS rồi).
+
+2.  **Invoice Generation (`account.move`)**:
+
+    - **Logic Report (QWeb PDF):**
+      ```xml
+      <t t-if="o.loyalty_claimed">
+          <div>Điểm tích lũy: <t t-esc="o.loyalty_points"/> (Đã cộng vào tài khoản)</div>
+      </t>
+      <t t-else="">
+          <div>Quét mã để tích điểm:</div>
+          <img t-att-src="'/qr/image/%s' % o.loyalty_qr_id.uuid"/>
+      </t>
+      ```
+    - **Logic Generate QR:**
+      - Chỉ sinh QR Code nếu `loyalty_claimed == False`.
+
+3.  **Self-Service Controller (Fallback)**:
+
+    - Xử lý trường hợp khách vãng lai về nhà mới quét.
+
+    ```python
+    @http.route('/loyalty/claim/<int:invoice_id>', type='http', auth='user')
+    def claim_loyalty_points(self, invoice_id, token, **kw):
+        # 1. Validate Invoice & Token
+        # Sử dụng 'access_token' có sẵn của account.move để xác thực
+        invoice = request.env['account.move'].sudo().browse(invoice_id)
+
+        # Check token hợp lệ (giống cơ chế Portal)
+        if not invoice.exists() or not invoice._check_access_token(token):
+             return "Mã QR không hợp lệ hoặc bạn không có quyền truy cập."
+
+        # 2. Check đã claim chưa (Double check)
+        # TH: Vợ ở nhà quét, Chồng ở quầy cũng vừa đọc số điện thoại xong
+        if invoice.loyalty_claimed:
+             return "Điểm của hóa đơn này đã được cộng."
+
+        # 3. Cộng điểm & Link User
+        # Nếu invoice chưa có partner_id (Guest), cần update partner_id = current_user
+        if not invoice.partner_id:
+             invoice.sudo().write({'partner_id': request.env.user.partner_id.id})
+
+        # ... (Logic cộng điểm) ...
+
+        return "Chúc mừng! Bạn đã nhận được điểm."
+    ```
+
+#### C. Member Identification (Thẻ thành viên)
+
+- **Mục đích:** Nhận diện khách hàng tại quầy POS để tích điểm/trừ điểm mà không cần đọc số điện thoại.
+- **Loại QR:**
+  1.  **Static:** Lưu mã định danh (VD: `MEMBER:0901234567`). Dễ triển khai nhưng dễ bị chụp trộm.
+  2.  **Dynamic Rotation (Recommended):** Tương tự HR Check-in. App khách hàng sinh mã thay đổi 60s/lần.
+- **Integration (POS Module):**
+  - Extend POS Interface để nhận input từ máy quét.
+  - API Backend: `/pos/member/identify`.
+  - Logic: Input -> Parse -> Tìm `res.partner` -> Set Client cho Order hiện tại.
+
+### 5.2. Anti-Counterferiting & Warranty (`kindoo_product_qrcode`) - Chưa ưu tiên
 
 - **Vấn đề:** QR trên `product.product` chỉ trỏ về trang thông tin chung, không phân biệt được hàng thật/giả.
-- **Giải pháp:** Gắn QR Code vào **`stock.lot` (Serial Number/Lô hàng)**. Mỗi sản phẩm vật lý có 1 mã QR duy nhất.
+- **Giải pháp:** Gắn QR Code và2 **`stock.lot` (Serial Number/Lô hàng)**. tiênsản phẩm vật lý có 1 mã QR duy nhất.
 
 #### A. Logic Check Hàng Giả (Anti-Counterfeit Flow)
 
@@ -551,59 +726,7 @@ def verify_product(self, lot_id, **kw):
     })
 ```
 
-### 5.2. Sales & Loyalty (`kindoo_sales_qrcode`)
-
-- **Mục đích:** Tăng cường trải nghiệm khách hàng thông qua việc tích hợp mã QR vào quy trình bán hàng (Coupon) và chăm sóc khách hàng (Loyalty Points).
-
-#### A. Coupon Voucher
-
-- **Logic:**
-  1.  Campaign Manager tạo Coupon -> Hệ thống sinh QR Dynamic.
-  2.  `target_url` của QR trỏ về: `/sales/coupon/scan?code=VIP2025`.
-- **Controller (`/sales/coupon/scan`):**
-
-  ```python
-  @http.route('/sales/coupon/scan', type='http', auth='public', website=True)
-  def scan_coupon(self, code, **kw):
-      # 1. Lấy Sale Order hiện tại (từ session)
-      order = request.website.sale_get_order(force_create=True)
-
-      # 2. Gọi logic Apply Coupon của module sale_coupon
-      status = request.env['sale.coupon.apply.code'].sudo().apply_coupon(order, code)
-
-      if status['error']:
-          return request.render('website_sale.cart', {'error_msg': status['error']})
-
-      # 3. Thành công -> Redirect về Giỏ hàng
-      return request.redirect('/shop/cart')
-  ```
-
-#### B. Loyalty Claim (Scan hóa đơn tích điểm)
-
-- **Model:** `account.move` (Invoice)
-- **New Field:** `loyalty_qr_id` (Link tới `qr.code`), `loyalty_claimed` (Boolean).
-- **Quy trình:**
-  1.  Khi Invoice được Post -> Tự động sinh QR Dynamic.
-  2.  `target_url`: `/loyalty/claim/<invoice_id>/<secret_token>`.
-- **Controller:**
-  - Check `request.env.user` -> Nếu chưa login -> Redirect Login.
-  - Check `invoice.loyalty_claimed` -> Nếu True -> Báo lỗi "Hóa đơn này đã được dùng".
-  - Check `secret_token` -> Khớp với token lưu trong Invoice (để tránh đoán mò ID).
-  - Gọi `loyalty.program` để cộng điểm cho User.
-  - Set `loyalty_claimed = True`.
-
-#### C. Member Identification (Thẻ thành viên)
-
-- **Mục đích:** Nhận diện khách hàng tại quầy POS để tích điểm/trừ điểm mà không cần đọc số điện thoại.
-- **Loại QR:**
-  1.  **Static:** Lưu mã định danh (VD: `MEMBER:0901234567`). Dễ triển khai nhưng dễ bị chụp trộm.
-  2.  **Dynamic Rotation (Recommended):** Tương tự HR Check-in. App khách hàng sinh mã thay đổi 60s/lần.
-- **Integration (POS Module):**
-  - Extend POS Interface để nhận input từ máy quét.
-  - API Backend: `/pos/member/identify`.
-  - Logic: Input -> Parse -> Tìm `res.partner` -> Set Client cho Order hiện tại.
-
-### 5.3. HR Check-in (`kindoo_hr_qrcode`)
+### 5.3. HR Check-in (`kindoo_hr_qrcode`) - Chưa ưu tiên
 
 - **Mục đích:** Điểm danh (Timekeeping) nhanh, chống gian lận (fake chấm công).
 - **Cơ chế:** **Dynamic QR Code (TOTP-based)**. Mã thay đổi mỗi 15s.
@@ -719,7 +842,7 @@ def scan_attendance(self, qr_content):
     }
 ```
 
-### 5.4. Contacts (`kindoo_contact_qrcode`)
+### 5.4. Contacts (`kindoo_contact_qrcode`) - Chưa ưu tiên
 
 - **Mục đích:** Chia sẻ thông tin liên hệ (Danh thiếp/vCard) một cách chuyên nghiệp. Người nhận chỉ cần quét mã để lưu ngay vào danh bạ điện thoại mà không cần gõ phím.
 - **Model:** `res.partner`

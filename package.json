@@ -22,7 +22,6 @@
     "katex": "^0.16.25",
     "markmap-lib": "^0.18.12",
     "markmap-view": "^0.18.12",
-    "mermaid": "^11.12.1",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
