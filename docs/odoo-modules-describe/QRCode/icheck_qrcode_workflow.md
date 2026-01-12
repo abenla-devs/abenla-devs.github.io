@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # TÀI LIỆU MÔ TẢ CHỨC NĂNG VÀ WORKFLOW HỆ THỐNG ICHECK
 
 Tài liệu này tổng hợp chi tiết các giải pháp số hóa dựa trên mã QR của iCheck, bao gồm quy trình vận hành (workflow) và các tính năng quản trị chuyên sâu dựa trên tài liệu nguồn.
