@@ -970,6 +970,7 @@ Cung cấp Pivot View và Graph View trên `qr.scan.log` để Marketing phân t
 - **Tại sao cần?**
   - Mặc dù `qrcode` có thể xuất SVG text, nhưng để convert SVG sang PDF hoặc PNG độ phân giải cực cao (High-DPI) cho in ấn Offset mà không vỡ hạt, `cairosvg` là lựa chọn tốt nhất.
   - Hỗ trợ Odoo Report (wkhtmltopdf) render các file SVG mượt hơn.
+  - **Lưu ý Deploy:** Thư viện này yêu cầu các gói OS-level như `libcairo2`, `libffi-dev` (cần cài trong Dockerfile), không chỉ đơn thuần là `pip install`.
 
 ### 9.4. `reportlab` (PDF Generation)
 
