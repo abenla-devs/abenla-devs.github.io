@@ -231,6 +231,7 @@ Quản lý các mẫu thiết kế có sẵn để tái sử dụng.
 | Field Name    | Type      | Description                                                                             |
 | :------------ | :-------- | :-------------------------------------------------------------------------------------- |
 | `name`        | Char      | Tên mẫu (VD: "Bộ nhận diện Brand X").                                                   |
+| `is_default`  | Boolean   | Default=False. Nếu True, mẫu này sẽ được dùng mặc định cho các mã tạo đơn lẻ.           |
 | `config_json` | Text      | Chứa cấu hình chi tiết cho việc Render ảnh (Style, Color, Logo). Xem cấu trúc bên dưới. |
 | `usage`       | Selection | Gợi ý sử dụng (`product`, `badge`, `coupon`).                                           |
 
@@ -347,6 +348,13 @@ def generate_qr(self, name, model, res_id, type='dynamic', target_url=None, stat
     # 1. Validation basics
     if type == 'dynamic' and not target_url:
         raise ValidationError("Dynamic QR requires a Target URL.")
+
+    # 2. Get Template (Priority: Option > Default)
+    template_id = options.get('design_template_id')
+    if not template_id:
+        default_template = self.env['qr.template'].search([('is_default', '=', True)], limit=1)
+        if default_template:
+            template_id = default_template.id
 
     # 2. Generate UUID
     uuid = self._generate_unique_uuid()
@@ -482,76 +490,7 @@ def get_image(self, format=None, **override_config):
 
 Phần này mô tả đặc tả kỹ thuật để Dev có thể code trực tiếp.
 
-### 5.1. Anti-Counterferiting & Warranty (`kindoo_product_qrcode`) - Chưa ưu tiên
-
-- **Vấn đề:** QR trên `product.product` chỉ trỏ về trang thông tin chung, không phân biệt được hàng thật/giả.
-- **Giải pháp:** Gắn QR Code vào **`stock.lot` (Serial Number/Lô hàng)**. tiênsản phẩm vật lý có 1 mã QR duy nhất.
-
-#### A. Logic Check Hàng Giả (Anti-Counterfeit Flow)
-
-Thực tế các hãng lớn (như tem SMS, tem Bộ Công An) dùng logic **"Kích hoạt lần đầu"**:
-
-1.  **Lần scan thứ 1:**
-    - Hệ thống kiểm tra `scan_count == 0` (hoặc chưa kích hoạt).
-    - Hiển thị: **"CHÚC MỪNG! SẢN PHẨM CHÍNH HÃNG"** (Màu Xanh).
-    - Action: Ghi nhận kích hoạt bảo hành, cập nhật `activate_date`.
-2.  **Lần scan thứ 2 trở đi:**
-    - Hệ thống thấy `scan_count > 0`.
-    - Hiển thị: **"CẢNH BÁO! MÃ NÀY ĐÃ ĐƯỢC QUÉT TRƯỚC ĐÓ"** (Màu Cam/Đỏ).
-    - Chi tiết: "Được quét lần đầu vào ngày 10/01/2025 tại Hà Nội". -> Giúp người dùng nhận biết nếu họ mua hàng mới mà code đã bị quét.
-
-#### B. Implementation (`stock.lot`)
-
-```python
-class StockLot(models.Model):
-    _inherit = 'stock.lot'
-
-    qr_code_id = fields.Many2one('qr.code', string="Auth QR")
-
-    def action_generate_serial_qr(self):
-        qr_env = self.env['qr.code']
-        for lot in self:
-            # QR trỏ về trang Xác thực
-            lot.qr_code_id = qr_env.generate_qr(
-                name=f"Serial: {lot.name}",
-                model='stock.lot',
-                res_id=lot.id,
-                type='dynamic',
-                target_url=f"/product/verify/{lot.id}", # Controller Verify
-                batch_id=self.env.context.get('active_batch_id') # Support Batch Generate
-            )
-```
-
-#### C. Controller `/product/verify/<id>`
-
-```python
-@http.route('/product/verify/<int:lot_id>', type='http', auth='public', website=True)
-def verify_product(self, lot_id, **kw):
-    lot = request.env['stock.lot'].sudo().browse(lot_id)
-    qr = lot.qr_code_id
-
-    # Lấy thông tin lần quét đầu tiên (nếu có) từ Log
-    first_scan = request.env['qr.scan.log'].sudo().search(
-        [('qr_code_id', '=', qr.id)], order='scan_time asc', limit=1
-    )
-
-    if not first_scan:
-        # Case 1: Hàng mới cứng
-        status = 'genuine'
-        msg = "Sản phẩm chính hãng. Được kích hoạt bảo hành từ bây giờ."
-    else:
-        # Case 2: Đã bị quét
-        status = 'warning'
-        msg = f"Cảnh báo: Mã này đã được kích hoạt ngày {first_scan.scan_time}."
-
-    return request.render('kindoo_product_qrcode.verify_page', {
-        'lot': lot,
-        'status': status,
-        'message': msg
-    })
-```
-
-### 5.2. Sales & Loyalty (`kindoo_sales_qrcode`) - Ưu tiên
+### 5.1. Sales & Loyalty (`kindoo_sales_qrcode`) - Ưu tiên
 
 - **Mục đích:** Tăng cường trải nghiệm khách hàng thông qua việc tích hợp mã QR vào quy trình bán hàng (Coupon) và chăm sóc khách hàng (Loyalty Points).
 
@@ -717,6 +656,75 @@ flowchart TD
   - Extend POS Interface để nhận input từ máy quét.
   - API Backend: `/pos/member/identify`.
   - Logic: Input -> Parse -> Tìm `res.partner` -> Set Client cho Order hiện tại.
+
+### 5.2. Anti-Counterferiting & Warranty (`kindoo_product_qrcode`) - Chưa ưu tiên
+
+- **Vấn đề:** QR trên `product.product` chỉ trỏ về trang thông tin chung, không phân biệt được hàng thật/giả.
+- **Giải pháp:** Gắn QR Code và2 **`stock.lot` (Serial Number/Lô hàng)**. tiênsản phẩm vật lý có 1 mã QR duy nhất.
+
+#### A. Logic Check Hàng Giả (Anti-Counterfeit Flow)
+
+Thực tế các hãng lớn (như tem SMS, tem Bộ Công An) dùng logic **"Kích hoạt lần đầu"**:
+
+1.  **Lần scan thứ 1:**
+    - Hệ thống kiểm tra `scan_count == 0` (hoặc chưa kích hoạt).
+    - Hiển thị: **"CHÚC MỪNG! SẢN PHẨM CHÍNH HÃNG"** (Màu Xanh).
+    - Action: Ghi nhận kích hoạt bảo hành, cập nhật `activate_date`.
+2.  **Lần scan thứ 2 trở đi:**
+    - Hệ thống thấy `scan_count > 0`.
+    - Hiển thị: **"CẢNH BÁO! MÃ NÀY ĐÃ ĐƯỢC QUÉT TRƯỚC ĐÓ"** (Màu Cam/Đỏ).
+    - Chi tiết: "Được quét lần đầu vào ngày 10/01/2025 tại Hà Nội". -> Giúp người dùng nhận biết nếu họ mua hàng mới mà code đã bị quét.
+
+#### B. Implementation (`stock.lot`)
+
+```python
+class StockLot(models.Model):
+    _inherit = 'stock.lot'
+
+    qr_code_id = fields.Many2one('qr.code', string="Auth QR")
+
+    def action_generate_serial_qr(self):
+        qr_env = self.env['qr.code']
+        for lot in self:
+            # QR trỏ về trang Xác thực
+            lot.qr_code_id = qr_env.generate_qr(
+                name=f"Serial: {lot.name}",
+                model='stock.lot',
+                res_id=lot.id,
+                type='dynamic',
+                target_url=f"/product/verify/{lot.id}", # Controller Verify
+                batch_id=self.env.context.get('active_batch_id') # Support Batch Generate
+            )
+```
+
+#### C. Controller `/product/verify/<id>`
+
+```python
+@http.route('/product/verify/<int:lot_id>', type='http', auth='public', website=True)
+def verify_product(self, lot_id, **kw):
+    lot = request.env['stock.lot'].sudo().browse(lot_id)
+    qr = lot.qr_code_id
+
+    # Lấy thông tin lần quét đầu tiên (nếu có) từ Log
+    first_scan = request.env['qr.scan.log'].sudo().search(
+        [('qr_code_id', '=', qr.id)], order='scan_time asc', limit=1
+    )
+
+    if not first_scan:
+        # Case 1: Hàng mới cứng
+        status = 'genuine'
+        msg = "Sản phẩm chính hãng. Được kích hoạt bảo hành từ bây giờ."
+    else:
+        # Case 2: Đã bị quét
+        status = 'warning'
+        msg = f"Cảnh báo: Mã này đã được kích hoạt ngày {first_scan.scan_time}."
+
+    return request.render('kindoo_product_qrcode.verify_page', {
+        'lot': lot,
+        'status': status,
+        'message': msg
+    })
+```
 
 ### 5.3. HR Check-in (`kindoo_hr_qrcode`) - Chưa ưu tiên
 
