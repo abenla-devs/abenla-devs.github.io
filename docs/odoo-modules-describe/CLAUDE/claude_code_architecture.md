@@ -9,7 +9,7 @@ sidebar_position: 1
 
 ---
 
-## 📑 Mục Lục
+## Mục Lục
 
 - [1. Tổng Quan](#1-tổng-quan)
 - [2. Agents - Subprocess Chuyên Biệt](#2-agents---subprocess-chuyên-biệt)
@@ -152,14 +152,14 @@ AI: Task(subagent_type="odoo-master",
 
 ### 2.5. Khi Nào Dùng Agents?
 
-✅ **Nên dùng khi:**
+**Nên dùng khi:**
 
 - Task phức tạp, cần nhiều bước
 - Cần expertise sâu về 1 domain (Python, Odoo, React, etc.)
 - Muốn giảm token usage của main conversation
 - Task cần autonomous execution
 
-❌ **Không nên dùng khi:**
+**Không nên dùng khi:**
 
 - Task đơn giản (đọc 1 file, edit 1 dòng)
 - Cần interaction liên tục với user
@@ -273,14 +273,14 @@ Skill(skill="search", args="balance sync")
 
 ### 3.6. Khi Nào Dùng Skills?
 
-✅ **Nên dùng khi:**
+**Nên dùng khi:**
 
 - Workflow lặp lại nhiều lần (commit, deploy, test)
 - Cần shorthand cho process nhiều bước
 - Muốn standardize team workflows
 - Task không cần expertise sâu
 
-❌ **Không nên dùng khi:**
+**Không nên dùng khi:**
 
 - Task phức tạp cần autonomous agent
 - Cần context isolation
@@ -319,7 +319,7 @@ Skill(skill="search", args="balance sync")
 
 ### 4.3. MCP Servers Trong Project
 
-#### **A. Context7 MCP** 📚
+#### **A. Context7 MCP**
 
 **Chức năng:** Fetch latest documentation từ libraries/frameworks
 
@@ -358,7 +358,7 @@ docs = mcp__context7__query-docs(
 - ✅ Find best practices từ official docs
 - ✅ Avoid outdated information
 
-#### **B. Serena MCP** 🔍
+#### **B. Serena MCP**
 
 **Chức năng:** Semantic code analysis & navigation
 
@@ -442,7 +442,7 @@ mcp__serena__replace_symbol_body(
 - ✅ **Precise editing**: Edit exact symbol, không risk breaking syntax
 - ✅ **Reference tracking**: Tìm được impact của changes
 
-#### **C. Playwright MCP** 🌐
+#### **C. Playwright MCP**
 
 **Chức năng:** Browser automation & web testing
 
@@ -484,7 +484,7 @@ browser_wait_for(text="Dashboard")
 
 ### 4.4. Khi Nào Dùng MCP?
 
-✅ **Nên dùng khi:**
+**Nên dùng khi:**
 
 - Cần latest docs/APIs (Context7)
 - Semantic code navigation (Serena)
@@ -492,7 +492,7 @@ browser_wait_for(text="Dashboard")
 - Access external data sources
 - Integration với third-party services
 
-❌ **Không nên dùng khi:**
+**Không nên dùng khi:**
 
 - Local file operations (dùng Read/Write tools)
 - Simple grep (dùng Grep tool)
@@ -640,14 +640,14 @@ Skill(skill="commit")
 
 ### 7.1. Agent Usage
 
-✅ **DO:**
+**DO:**
 
 - Spawn agent cho tasks phức tạp (> 5 steps)
 - Chọn agent phù hợp với domain (python-pro cho Python, odoo-master cho Odoo)
 - Provide clear, detailed prompt cho agent
 - Let agent work autonomously
 
-❌ **DON'T:**
+  **DON'T:**
 
 - Spawn agent cho task đơn giản
 - Interrupt agent giữa chừng
@@ -656,14 +656,14 @@ Skill(skill="commit")
 
 ### 7.2. Skill Creation
 
-✅ **DO:**
+**DO:**
 
 - Tạo skill cho workflows lặp lại ≥ 3 lần
 - Document skill rõ ràng trong markdown
 - Test skill thoroughly trước khi share team
 - Version control skills trong repo
 
-❌ **DON'T:**
+**DON'T:**
 
 - Tạo skill cho one-time task
 - Over-complicate skill logic
@@ -671,14 +671,14 @@ Skill(skill="commit")
 
 ### 7.3. MCP Integration
 
-✅ **DO:**
+**DO:**
 
 - **Context7**: Always verify latest docs trước khi code
 - **Serena**: Dùng cho semantic navigation, giảm token usage
 - **Playwright**: Automate repetitive UI testing
 - Check MCP server status nếu có lỗi
 
-❌ **DON'T:**
+**DON'T:**
 
 - Query Context7 cho outdated libraries
 - Read full files khi Serena có thể query symbols
