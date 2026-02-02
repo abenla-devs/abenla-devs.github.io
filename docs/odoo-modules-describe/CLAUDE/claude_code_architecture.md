@@ -515,7 +515,7 @@ browser_wait_for(text="Dashboard")
 | **Setup**       | Built-in               | User creates files    | Config + server               |
 | **Use case**    | Complex tasks          | Repetitive workflows  | External data/integration     |
 
-### 5.2. Quyết Định Tree
+### 5.2. Cây Quyết Định
 
 ```
 Cần làm task gì?
