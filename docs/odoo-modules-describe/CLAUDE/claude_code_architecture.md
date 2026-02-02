@@ -2,7 +2,6 @@
 sidebar_position: 1
 ---
 
-
 # Claude Code Architecture Guide
 
 > **Tài liệu hướng dẫn về Agents, Skills và MCP trong Claude Code**
@@ -164,7 +163,7 @@ AI: Task(subagent_type="odoo-master",
 
 - Task đơn giản (đọc 1 file, edit 1 dòng)
 - Cần interaction liên tục với user
-- Task quá nhỏ (< 3 steps)
+- Task quá nhỏ (`< 3 steps`)
 
 ---
 
@@ -194,7 +193,7 @@ Khi gọi skill:
 
 **File**: `~/.claude/commands/commit.md`
 
-```markdown
+````markdown
 ---
 skill_name: commit
 description: Create git commit with conventional format
@@ -216,6 +215,7 @@ When this skill is invoked:
 5. Show commit hash and summary
 
 Example commit message:
+
 ```
 
 feat(sms): add eSMS provider support
@@ -227,8 +227,7 @@ feat(sms): add eSMS provider support
 Co-Authored-By: Claude <noreply@anthropic.com>
 
 ```
-
-```
+````
 
 ### 3.4. Cách Sử Dụng Skills
 
